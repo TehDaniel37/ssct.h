@@ -10,23 +10,29 @@ A stupid simple [XUnit](https://en.wikipedia.org/wiki/XUnit) type test "framewor
 
 ### Example test file
 ```C
-#include "ssct.h"
-#include "my_implementation.h"
+1   #include "ssct.h"
+2   #include "my_implementation.h"
+3   
+4   static void foo_should_return_bar() {
+5       const char *expected = "bar";
+6       char *actual = foo();
+7
+8       ssct_assert_equals(actual, strlen(actual), expected, strlen(expected));
+9   }
+10
+11  int main(void) {
+12      ssct_run(foo_should_return_bar);
+13
+14      ssct_print_summary();
+15
+16      return 0;
+17  }
+```
 
-static void foo_should_return_bar() {
-    const char *expected = "bar";
-    char *actual = foo();
-    
-    ssct_assert_equals(actual, strlen(actual), expected, strlen(expected));
-}
-
-int main(void) {
-    ssct_run(foo_should_return_bar);
-    
-    ssct_print_summary();
-    
-    return 0;
-}
+Running the test file outputs:
+```
+Assertion failed for foo_should_return_bar() on line 8. Was foo but expected bar.
+Test test.c: Ran 1 test. 0 succeeded and 1 failed.
 ```
 
 ### Macros
@@ -49,32 +55,42 @@ ssct supports setup and teardown functions that are called before/after each of 
 
 #### Example using setup & teardown
 ```C
-#include "ssct.h"
-#include "my_implementation.h"
+1   #include "ssct.h"
+2   #include "my_implementation.h"
+3   
+4   struct FooBar *foo_bar;
+5   
+6   static void setup() {
+7       puts("Allocating foo_bar");
+8       foo_bar = (struct FooBar *)malloc(sizeof(struct FooBar));
+9   }
+10  
+11  static void teardown() {
+12      puts("Freeing foo_bar");
+13      free(foo_bar);
+14  }
+15  
+16  static void foo_bar_init_should_set_foo_to_5() {
+17      foo_bar_init(&foo_bar);
+18      assert_equals(foo_bar.foo, 5);
+19  }
+20  
+21  int main(void) {
+22      ssct_setup = setup;
+23      ssct_teardown = teardown;
+24      
+25      ssct_run(foo_bar_init_should_set_foo_to_5);
+26      
+27      ssct_print_summary();
+28      
+29      return 0;
+30  }
+```
 
-struct FooBar *foo_bar;
-
-static void setup() {
-    foo_bar = (struct FooBar *)malloc(sizeof(struct FooBar));
-}
-
-static void teardown() {
-    free(foo_bar);
-}
-
-static void foo_bar_init_should_set_foo_to_5() {
-    foo_bar_init(&foo_bar);
-    assertEquals(foo_bar.foo, 5);
-}
-
-int main(void) {
-    ssct_setup = setup;
-    ssct_teardown = teardown;
-    
-    ssct_run(foo_bar_init_should_set_foo_to_5);
-    
-    ssct_print_summary();
-    
-    return 0;
-}
+Running this test file outputs:
+```
+Allocating foo_bar
+Assertion failed for foo_bar_init_should_set_foo_to_5() on line 18. Was 0 but expected 5.
+Freeing foo_bar
+Test test.c: Ran 1 test. 0 succeeded and 1 failed.
 ```
