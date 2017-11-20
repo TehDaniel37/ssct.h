@@ -95,7 +95,7 @@ do                                                                            \
         if (strncmp(actual, expected,                                         \
                     ((actual_len) < (expected_len) ?                          \
                      (actual_len) :                                           \
-                     (expected_len)) == 0))                                   \
+                     (expected_len)) != 0))                                   \
         {                                                                     \
             fprintf(stderr, "Assertion failed for %s() on line %d. Was %s but expected %s.\n",    \
                     (__func__), __LINE__, (actual), (expected));              \
