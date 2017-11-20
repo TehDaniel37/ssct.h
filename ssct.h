@@ -46,11 +46,11 @@ do                                                                            \
     {                                                                         \
         if ((msg)[0] == '\0')                                                 \
         {                                                                     \
-            printf("Assertion failed for %s() on line %d.\n", __func__, __LINE__); \
+            fprintf(stderr, "Assertion failed for %s() on line %d.\n", __func__, __LINE__); \
         }                                                                     \
         else                                                                  \
         {                                                                     \
-            printf("Assertion failed for %s() on line %d: '%s'\n", __func__, __LINE__, (msg)); \
+            fprintf(stderr, "Assertion failed for %s() on line %d: '%s'\n", __func__, __LINE__, (msg)); \
         }                                                                     \
         ssct_assertions_failed++;                                                  \
     }                                                                         \
@@ -72,7 +72,7 @@ do                                                                            \
     {                                                                         \
         if ((actual) != (expected))                                           \
         {                                                                     \
-            printf("Assertion failed for %s() on line %d. Was %d but expected %d.\n",    \
+            fprintf(stderr, "Assertion failed for %s() on line %d. Was %d but expected %d.\n",    \
                     (__func__), (__LINE__), (actual), (expected));                        \
             ssct_assertions_failed++;                                              \
         }                                                                     \
@@ -83,7 +83,7 @@ do                                                                            \
     {                                                                         \
         if (fabs((actual) - (expected)) > (error))                            \
         {                                                                     \
-            printf("Assertion failed for %s() on line %d. Was %f but expected %f.\n",    \
+            fprintf(stderr, "Assertion failed for %s() on line %d. Was %f but expected %f.\n",    \
                     (__func__), __LINE__, (actual), (expected));                        \
             ssct_assertions_failed++;                                              \
         }                                                                     \
@@ -97,7 +97,7 @@ do                                                                            \
                      (actual_len) :                                           \
                      (expected_len)) == 0))                                   \
         {                                                                     \
-            printf("Assertion failed for %s() on line %d. Was %s but expected %s.\n",    \
+            fprintf(stderr, "Assertion failed for %s() on line %d. Was %s but expected %s.\n",    \
                     (__func__), __LINE__, (actual), (expected));              \
             ssct_assertions_failed++;                                              \
         }                                                                     \
